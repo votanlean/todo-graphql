@@ -39,7 +39,23 @@ const resolvers = {
         message: 'Task added',
         task,
       }
-    }
+    },
+    deleteTask: async (_, {id}, {dataSources})  => {
+      const task = await dataSources.postgres.deleteTask(id);
+      console.log('task', task);
+      if (!task) {
+        return {
+          code: 404,
+          success: false,
+          message: `Task not found with id ${id}`,
+        }
+      }
+      return {
+        code: 200,
+        success: true,
+        message: 'Task deleted',
+      }
+    },
   }
 }
 

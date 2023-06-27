@@ -29,4 +29,9 @@ export class PostgresDataSource extends DataSource {
     const result = await this.pool.query('INSERT INTO tasks (name, done) VALUES ($1, false) RETURNING *', [name]);
     return result.rows[0];
   }
+
+  async deleteTask(id: number) {
+    const result = await this.pool.query('DELETE FROM tasks WHERE id = $1 RETURNING *', [id]);
+    return result.rows[0];
+  }
 }

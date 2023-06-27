@@ -14,6 +14,7 @@ const typeDefs = gql`
   type Mutation {
     toggleTaskStatus(id: ID!): SingleTaskResponse!
     addTask(name: String!): SingleTaskResponse!
+    deleteTask(id: ID!): Response!
   }
 
   type SingleTaskResponse {
@@ -21,6 +22,12 @@ const typeDefs = gql`
     success: Boolean!
     message: String!
     task: Task
+  }
+
+  type Response {
+    code: Int!
+    success: Boolean!
+    message: String!
   }
 `
 export default typeDefs;

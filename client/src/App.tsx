@@ -63,14 +63,22 @@ const ADD_TASK = gql(/* GraphQL */ `
   }
 `);
 
+const DELETE_TASK = gql(/* GraphQL */ `
+  mutation DeleteTask($id: ID!) {
+    deleteTask(id: $id) {
+      code
+      success
+      message
+    }
+  }
+`);
+
 function App() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const { loading, data, refetch } = useQuery(GET_TASKS);
   const [toggleTaskStatus] = useMutation(TOGGLE_TASK_STATUS);
   const [addTask] = useMutation(ADD_TASK);
-
-  
-
+  const [deleteTask] = useMutation(DELETE_TASK);
 
   useEffect(() => {
     const apiTasks = (data?.tasks || [])
@@ -89,12 +97,17 @@ function App() {
     await toggleTaskStatus({ variables: { id } })
     refetch();
   };
+
+  const onDeleteTask = async (id: number) => {
+    await deleteTask({ variables: { id } })
+    refetch();
+  }
   return (
     <ThemeProvider theme={theme}>
       <AddTask onAddTask={onAddTask} />
       <h1>Task List</h1>
 
-      {loading ? <CircularProgress /> : <TaskList tasks={tasks} onChangeTask={onChangeTask} />}
+      {loading ? <CircularProgress /> : <TaskList tasks={tasks} onChangeTask={onChangeTask} onDeleteTask={onDeleteTask} />}
     </ThemeProvider>
   );
 }
