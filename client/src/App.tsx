@@ -48,30 +48,46 @@ const TOGGLE_TASK_STATUS = gql(/* GraphQL */ `
   }
 `);
 
-function App() {
-  const { loading, data } = useQuery(GET_TASKS);
-  const [toggleTaskStatus] = useMutation(TOGGLE_TASK_STATUS);
+const ADD_TASK = gql(/* GraphQL */ `
+  mutation AddTask($name: String!) {
+    addTask(name: $name) {
+      code
+      success
+      message
+      task {
+        id
+        name
+        done
+      }
+    }
+  }
+`);
 
-  const apiTasks = (data?.tasks || [])
+function App() {
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const { loading, data, refetch } = useQuery(GET_TASKS);
+  const [toggleTaskStatus] = useMutation(TOGGLE_TASK_STATUS);
+  const [addTask] = useMutation(ADD_TASK);
+
+  
+
+
+  useEffect(() => {
+    const apiTasks = (data?.tasks || [])
     .filter((task: Task) => task != null && task != undefined)
     .map((task: Task) => ({id: task.id, name: task.name, done: task.done}));
 
-  const [tasks, setTasks] = useState<Task[]>([]);
-
-  useEffect(() => {
     setTasks(apiTasks);
-  }, [apiTasks]);
+  }, [data]);
 
-  const onAddTask = (task: Task) => {
-    const newTasks = [...tasks];
-    newTasks.push(task);
-    setTasks(newTasks);
+  const onAddTask = async (name: string) => {
+    await addTask({ variables: { name }});
+    refetch();
   };
+
   const onChangeTask = async (id: number) => {
-    const {data} = await toggleTaskStatus({ variables: { id } })
-    const task = data.toggleTaskStatus.task;
-    const editedTask = [...(tasks.filter((item) => item.id !== task.id)), task];
-    setTasks(editedTask);
+    await toggleTaskStatus({ variables: { id } })
+    refetch();
   };
   return (
     <ThemeProvider theme={theme}>

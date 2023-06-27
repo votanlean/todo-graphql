@@ -1,14 +1,13 @@
 import { Button, FormControl, TextField } from "@mui/material";
-import { Task } from "../types/Task";
 import { useState } from "react";
 type addTaskProps = {
-  onAddTask: (task: Task) => void;
+  onAddTask: (name: string) => void;
 }
 
 const AddTask = ({onAddTask}: addTaskProps) => {
   const [taskName, setTaskName] = useState<string>("");
   const onClickAddTask = () => {
-    onAddTask({name: taskName, done: false});
+    onAddTask(taskName);
     setTaskName("");
   }
   return (
