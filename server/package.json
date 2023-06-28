@@ -14,6 +14,7 @@
   "dependencies": {
     "@apollo/server": "^4.7.4",
     "apollo-datasource": "^3.3.2",
+    "apollo-datasource-rest": "^3.7.0",
     "apollo-server-express": "^3.12.0",
     "graphql": "^16.6.0",
     "pg": "^8.11.0"

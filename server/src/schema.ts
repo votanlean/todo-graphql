@@ -7,8 +7,16 @@ const typeDefs = gql`
     done: Boolean!
   }
 
+  type Quote {
+    id: ID!
+    content: String!
+    author: String!
+    tags: [String!]
+  }
+
   type Query {
     tasks: [Task!]
+    getRandomQuote: Quote
   }
 
   type Mutation {

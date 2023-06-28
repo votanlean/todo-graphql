@@ -4,13 +4,18 @@ import express from 'express';
 import { PostgresDataSource } from './datasources/postgres-data-source.js';
 import resolvers from './resolvers.js';
 import typeDefs from './schema.js';
+import { QuoteAPI } from './datasources/quoteAPI.js';
+
+interface ContextValue {
+  postgres: PostgresDataSource;
+  quoteAPI: QuoteAPI;
+}
 
 
-const dataSources = () => ({
+const server = new ApolloServer<ContextValue>({typeDefs, resolvers, dataSources: () => ({
   postgres: new PostgresDataSource(),
-});
-
-const server = new ApolloServer({typeDefs, resolvers, dataSources, plugins: [ApolloServerPluginLandingPageDisabled()]})
+  quoteAPI: new QuoteAPI(),
+}), plugins: [ApolloServerPluginLandingPageDisabled()]})
 await server.start();
 const app = express();
 server.applyMiddleware({app});

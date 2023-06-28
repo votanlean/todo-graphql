@@ -1,11 +1,15 @@
 const resolvers = {
   Query: {
-    tasks: async (_, __, {dataSources}) => {
+    tasks: async (_, __, { dataSources }) => {
       return await dataSources.postgres.getTasks();
+    },
+    getRandomQuote: async (_, __, { dataSources }) => {
+      const quote = await dataSources.quoteAPI.getRandomQuote();
+      return {id: quote._id, content: quote.content, author: quote.author, tags: quote.tags};
     },
   },
   Mutation: {
-    toggleTaskStatus: async (_, {id}, {dataSources})  => {
+    toggleTaskStatus: async (_, { id }, { dataSources }) => {
       const task = await dataSources.postgres.toggleTaskStatus(id);
       if (!task) {
         return {
@@ -13,50 +17,50 @@ const resolvers = {
           success: false,
           message: `Task not found with id ${id}`,
           task: null,
-        }
+        };
       }
       task.done = !task.done;
       return {
         code: 200,
         success: true,
-        message: 'Task updated',
+        message: "Task updated",
         task,
-      }
+      };
     },
-    addTask: async (_, {name}, {dataSources}) => {
+    addTask: async (_, { name }, { dataSources }) => {
       const task = await dataSources.postgres.addTask(name);
       if (!task) {
         return {
           code: 500,
           success: false,
-          message: 'Error adding task',
+          message: "Error adding task",
           task: null,
-        }
+        };
       }
       return {
         code: 200,
         success: true,
-        message: 'Task added',
+        message: "Task added",
         task,
-      }
+      };
     },
-    deleteTask: async (_, {id}, {dataSources})  => {
+    deleteTask: async (_, { id }, { dataSources }) => {
       const task = await dataSources.postgres.deleteTask(id);
-      console.log('task', task);
+      console.log("task", task);
       if (!task) {
         return {
           code: 404,
           success: false,
           message: `Task not found with id ${id}`,
-        }
+        };
       }
       return {
         code: 200,
         success: true,
-        message: 'Task deleted',
-      }
+        message: "Task deleted",
+      };
     },
-  }
-}
+  },
+};
 
 export default resolvers;
