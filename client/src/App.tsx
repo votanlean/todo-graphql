@@ -4,8 +4,8 @@ import {
   CircularProgress,
   Collapse,
   IconButton,
-  Stack,
   ThemeProvider,
+  Typography,
   createTheme,
 } from "@mui/material";
 import "./App.css";
@@ -15,6 +15,7 @@ import { useEffect, useState } from "react";
 import { AlertMessage, Task } from "./types/Task";
 import { useMutation, useQuery, gql } from "@apollo/client";
 import CloseIcon from "@mui/icons-material/Close";
+import FormatQuoteIcon from "@mui/icons-material/FormatQuote";
 
 const theme = createTheme({
   palette: {
@@ -106,7 +107,10 @@ function App() {
   const onAddTask = async (name: string) => {
     await addTask({ variables: { name } });
     setAlertMessage({ message: "Task added", severity: "success", open: true });
-    setTimeout(() => {console.log('time out'); setAlertMessage({message: "", severity: "", open: false})}, 1000);
+    setTimeout(() => {
+      console.log("time out");
+      setAlertMessage({ message: "", severity: "", open: false });
+    }, 1000);
     refetch();
   };
 
@@ -117,7 +121,10 @@ function App() {
       severity: "success",
       open: true,
     });
-    setTimeout(() => {console.log('time out'); setAlertMessage({message: "", severity: "", open: false})}, 1000);
+    setTimeout(() => {
+      console.log("time out");
+      setAlertMessage({ message: "", severity: "", open: false });
+    }, 1000);
     refetch();
   };
 
@@ -128,12 +135,23 @@ function App() {
       severity: "success",
       open: true,
     });
-    setTimeout(() => {console.log('time out'); setAlertMessage({message: "", severity: "", open: false})}, 1000);
+    setTimeout(() => {
+      console.log("time out");
+      setAlertMessage({ message: "", severity: "", open: false });
+    }, 1000);
     refetch();
   };
   return (
     <ThemeProvider theme={theme}>
+      <Box sx={{ padding: "1rem", marginBottom: "1rem" }}>
+        <Typography variant="body1">
+          <FormatQuoteIcon />
+          <i>The secret of getting ahead is getting started.</i>
+          <FormatQuoteIcon />
+        </Typography>
+      </Box>
       <AddTask onAddTask={onAddTask} />
+      
       <h1>Task List</h1>
 
       {loading ? (
