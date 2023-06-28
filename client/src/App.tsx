@@ -13,7 +13,8 @@ import TaskList from "./components/TaskList";
 import AddTask from "./components/AddTask";
 import { useEffect, useState } from "react";
 import { AlertMessage, Task } from "./types/Task";
-import { useMutation, useQuery, gql } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
+import {gql} from "./__generated__/gql";
 import CloseIcon from "@mui/icons-material/Close";
 import FormatQuoteIcon from "@mui/icons-material/FormatQuote";
 
@@ -40,6 +41,17 @@ const GET_TASKS = gql(/* GraphQL */ `
       id
       name
       done
+    }
+  }
+`);
+
+const GET_RANDOM_QUOTE = gql(/* GraphQL */ `
+  query GetRandomQuote {
+    getRandomQuote {
+      id
+      content
+      author
+      tags
     }
   }
 `);
@@ -86,23 +98,29 @@ const DELETE_TASK = gql(/* GraphQL */ `
 
 function App() {
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [quote, setQuote] = useState<string>("");
   const [alertMessage, setAlertMessage] = useState<AlertMessage>({
     message: "",
     severity: "",
     open: false,
   });
   const { loading, data, refetch } = useQuery(GET_TASKS);
+  const { loading: loadingQuote, data: dataQuote } = useQuery(GET_RANDOM_QUOTE);
   const [toggleTaskStatus] = useMutation(TOGGLE_TASK_STATUS);
   const [addTask] = useMutation(ADD_TASK);
   const [deleteTask] = useMutation(DELETE_TASK);
 
   useEffect(() => {
-    const apiTasks = (data?.tasks || [])
-      .filter((task: Task) => task != null && task != undefined)
-      .map((task: Task) => ({ id: task.id, name: task.name, done: task.done }));
-
-    setTasks(apiTasks);
+    const tasks: Task[] = (data?.tasks || [])
+      .filter((task) => task != null && task != undefined)
+      .map((task) => ({ id: parseInt(task.id), name: task.name, done: task.done }));
+    setTasks(tasks);
   }, [data]);
+
+  useEffect(() => {
+    const quote = (dataQuote?.getRandomQuote?.content || "");
+    setQuote(quote);
+  }, [dataQuote]);
 
   const onAddTask = async (name: string) => {
     await addTask({ variables: { name } });
@@ -144,14 +162,18 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{ padding: "1rem", marginBottom: "1rem" }}>
-        <Typography variant="body1">
-          <FormatQuoteIcon />
-          <i>The secret of getting ahead is getting started.</i>
-          <FormatQuoteIcon />
-        </Typography>
+        {loadingQuote ? (
+          <CircularProgress />
+        ) : (
+          <Typography variant="body1">
+            <FormatQuoteIcon />
+            <i>{quote}</i>
+            <FormatQuoteIcon />
+          </Typography>
+        )}
       </Box>
       <AddTask onAddTask={onAddTask} />
-      
+
       <h1>Task List</h1>
 
       {loading ? (

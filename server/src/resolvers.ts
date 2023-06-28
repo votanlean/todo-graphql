@@ -4,8 +4,7 @@ const resolvers = {
       return await dataSources.postgres.getTasks();
     },
     getRandomQuote: async (_, __, { dataSources }) => {
-      const quote = await dataSources.quoteAPI.getRandomQuote();
-      return {id: quote._id, content: quote.content, author: quote.author, tags: quote.tags};
+      return await dataSources.quoteAPI.getRandomQuote();
     },
   },
   Mutation: {

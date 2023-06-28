@@ -7,7 +7,7 @@ export class QuoteAPI extends RESTDataSource {
   }
 
   async getRandomQuote() {
-    const response = await this.get('random');
-    return response;
+    const quote = await this.get('random');
+    return {id: quote._id, ...quote};
   }
 }

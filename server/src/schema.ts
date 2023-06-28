@@ -16,7 +16,7 @@ const typeDefs = gql`
 
   type Query {
     tasks: [Task!]
-    getRandomQuote: Quote
+    getRandomQuote: Quote!
   }
 
   type Mutation {
