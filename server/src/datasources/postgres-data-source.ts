@@ -1,17 +1,18 @@
 import {DataSource} from 'apollo-datasource'
 import pg from "pg";
 const {Pool} = pg;
+import 'dotenv/config'
 
 export class PostgresDataSource extends DataSource {
   private pool;
   constructor() {
     super();
     this.pool = new Pool({
-      user: 'postgres',
-      host: 'localhost',
-      database: 'todo',
-      password: 'postgres',
-      port: 5432,
+      user: process.env.POSTGRES_USER || 'postgres',
+      host: process.env.POSTGRES_HOST || 'localhost',
+      database: process.env.POSTGRES_DATABASE || 'todo',
+      password: process.env.POSTGRES_PASSWORD || 'postgres',
+      port: process.env.POSTGRES_PORT || 5432,
     });
   }
 
