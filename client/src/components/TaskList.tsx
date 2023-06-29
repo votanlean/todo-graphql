@@ -10,8 +10,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 type taskListProps = {
   tasks: Task[];
-  onChangeTask: (id: number) => void;
-  onDeleteTask: (id: number) => void;
+  onChangeTask: (id: string) => void;
+  onDeleteTask: (id: string) => void;
 };
 
 const TaskList = ({tasks, onChangeTask, onDeleteTask}: taskListProps) => {

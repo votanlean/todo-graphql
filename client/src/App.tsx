@@ -113,7 +113,7 @@ function App() {
   useEffect(() => {
     const tasks: Task[] = (data?.tasks || [])
       .filter((task) => task != null && task != undefined)
-      .map((task) => ({ id: parseInt(task.id), name: task.name, done: task.done }));
+      .map((task) => ({ id: task.id, name: task.name, done: task.done }));
     setTasks(tasks);
   }, [data]);
 
@@ -131,7 +131,7 @@ function App() {
     refetch();
   };
 
-  const onChangeTask = async (id: number) => {
+  const onChangeTask = async (id: string) => {
     await toggleTaskStatus({ variables: { id } });
     setAlertMessage({
       message: "Task status changed",
@@ -144,7 +144,7 @@ function App() {
     refetch();
   };
 
-  const onDeleteTask = async (id: number) => {
+  const onDeleteTask = async (id: string) => {
     await deleteTask({ variables: { id } });
     setAlertMessage({
       message: "Task deleted",
