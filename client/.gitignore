@@ -24,4 +24,3 @@ dist-ssr
 *.sw?
 
 # codegen https://github.com/dotansimha/graphql-code-generator/discussions/4253#discussioncomment-27853
-src/__generated__
