@@ -15,7 +15,7 @@ interface ContextValue {
 const server = new ApolloServer<ContextValue>({typeDefs, resolvers, dataSources: () => ({
   postgres: new PostgresDataSource(),
   quoteAPI: new QuoteAPI(),
-}), plugins: [ApolloServerPluginLandingPageDisabled()]})
+}), plugins: [ApolloServerPluginLandingPageDisabled()], introspection: true}) // Allow introspection for testing purposes
 await server.start();
 const app = express();
 server.applyMiddleware({app});
