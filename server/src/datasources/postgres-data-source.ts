@@ -17,7 +17,7 @@ export class PostgresDataSource extends DataSource {
   }
 
   async getTasks() {
-    const result = await this.pool.query('SELECT * FROM tasks');
+    const result = await this.pool.query('SELECT * FROM tasks ORDER BY id DESC');
     return result.rows;
   }
 

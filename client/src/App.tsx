@@ -126,7 +126,6 @@ function App() {
     await addTask({ variables: { name } });
     setAlertMessage({ message: "Task added", severity: "success", open: true });
     setTimeout(() => {
-      console.log("time out");
       setAlertMessage({ message: "", severity: "", open: false });
     }, 1000);
     refetch();
@@ -140,7 +139,6 @@ function App() {
       open: true,
     });
     setTimeout(() => {
-      console.log("time out");
       setAlertMessage({ message: "", severity: "", open: false });
     }, 1000);
     refetch();
@@ -154,7 +152,6 @@ function App() {
       open: true,
     });
     setTimeout(() => {
-      console.log("time out");
       setAlertMessage({ message: "", severity: "", open: false });
     }, 1000);
     refetch();
