@@ -5,6 +5,8 @@ import { PostgresDataSource } from './datasources/postgres-data-source.js';
 import resolvers from './resolvers.js';
 import typeDefs from './schema.js';
 import { QuoteAPI } from './datasources/quoteAPI.js';
+import cors from 'cors';
+import 'dotenv/config'
 
 interface ContextValue {
   postgres: PostgresDataSource;
@@ -18,5 +20,6 @@ const server = new ApolloServer<ContextValue>({typeDefs, resolvers, dataSources:
 }), plugins: [ApolloServerPluginLandingPageDisabled()], introspection: true}) // Allow introspection for testing purposes
 await server.start();
 const app = express();
+app.use(cors({origin: process.env.CLIENT_HOST || 'http://localhost:3000'}));
 server.applyMiddleware({app});
 app.listen({port: 4000}, () => console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`));
